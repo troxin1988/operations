@@ -14,3 +14,15 @@ def read_json(filename: str) -> list | None:
         print("File not found")
         return None
     return all_operations
+
+
+def filter_operations(operations: list) -> list:
+    """
+    Возвращает операции, которые EXECUTE.
+
+    :param operations: список операций
+    :return: список отфильтрованных операций
+    """
+
+    filtered = list(filter(lambda x: x.get("state") == "EXECUTED", operations))
+    return filtered
