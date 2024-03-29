@@ -41,3 +41,28 @@ def sort_operations(operations: list) -> list:
                                key=lambda x: datetime.strptime(x["date"], "%Y-%m-%dT%H:%M:%S.%f"),
                                reverse=True)
     return sorted_operations
+
+
+def format_account(account: str) -> str:
+    """
+    Форматирует номер счета или карты, приводя его к шаблонам:
+    - Visa Platinum 7000 79** **** 6361
+    - Счет **9638
+
+    :param account: счет или карта
+    :return: форматированная строка
+    """
+
+    *type_account, number = account.split()
+    type_account = " ".join(type_account)
+    if type_account.lower() == "счет":
+        # последние 4 цифры счета, установив ** перед ними
+        number = number[-4:].rjust(6, "*")
+    else:
+        # разбивка на 4 блока, редактирование и слияние
+        number = [number[block * 4:block * 4 + 4] for block in range(4)]
+        number[1] = number[1][:2].ljust(4, "*")
+        number[2] = "*" * 4
+        number = " ".join(number)
+
+    return " ".join((type_account, number))

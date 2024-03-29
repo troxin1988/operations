@@ -1,6 +1,6 @@
 import pytest
 
-from operations.utils import read_json, filter_operations, sort_operations
+from operations.utils import read_json, filter_operations, sort_operations, format_account
 from os import path
 
 operations = [
@@ -28,3 +28,9 @@ def test_filter_operations(operations_fixture):
 
 def test_sort_operations(operations_fixture):
     assert [i["id"] for i in sort_operations(operations_fixture)] == [3, 2, 4, 1]
+
+
+def test_format_account():
+    assert format_account("Visa Classic 7756673469642839") == "Visa Classic 7756 67** **** 2839"
+    assert format_account("Maestro 7756673469642839") == "Maestro 7756 67** **** 2839"
+    assert format_account("Счет 7756673469642839") == "Счет **2839"
