@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 
 def read_json(filename: str) -> list | None:
@@ -26,3 +27,17 @@ def filter_operations(operations: list) -> list:
 
     filtered = list(filter(lambda x: x.get("state") == "EXECUTED", operations))
     return filtered
+
+
+def sort_operations(operations: list) -> list:
+    """
+    Сортирует операции по дате (по убыванию)
+
+    :param operations: список операций
+    :return: Отсортированный список
+    """
+
+    sorted_operations = sorted(operations,
+                               key=lambda x: datetime.strptime(x["date"], "%Y-%m-%dT%H:%M:%S.%f"),
+                               reverse=True)
+    return sorted_operations

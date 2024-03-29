@@ -1,12 +1,19 @@
-from operations.utils import read_json, filter_operations
+import pytest
+
+from operations.utils import read_json, filter_operations, sort_operations
 from os import path
 
 operations = [
-    {"state": "EXECUTED"},
-    {"state": "CANCELED"},
-    {},
-    {"state": "EXECUTED"}
+    {"id": 1, "state": "EXECUTED", "date": "2018-01-01T00:00:00.000000"},
+    {"id": 2, "state": "CANCELED", "date": "2018-02-01T00:00:00.000000"},
+    {"id": 3, "state": "EXECUTED", "date": "2018-03-01T00:00:00.000000"},
+    {"id": 4, "state": "EXECUTED", "date": "2018-01-01T00:00:00.000001"}
 ]
+
+
+@pytest.fixture
+def operations_fixture():
+    return operations
 
 
 def test_read_json():
@@ -15,5 +22,9 @@ def test_read_json():
     assert read_json("") == None
 
 
-def test_filter_operations():
-    assert len(filter_operations(operations)) == 2
+def test_filter_operations(operations_fixture):
+    assert len(filter_operations(operations_fixture)) == 3
+
+
+def test_sort_operations(operations_fixture):
+    assert [i["id"] for i in sort_operations(operations_fixture)] == [3, 2, 4, 1]
