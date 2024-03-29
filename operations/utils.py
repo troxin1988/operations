@@ -66,3 +66,26 @@ def format_account(account: str) -> str:
         number = " ".join(number)
 
     return " ".join((type_account, number))
+
+
+def format_operation(operation: dict) -> str:
+    """
+    Преобразует операцию в форматированную строку вида:
+    14.10.2018 Перевод организации
+    Visa Platinum 7000 79** **** 6361 -> Счет **9638
+    82771.72 руб.
+    """
+
+    datetime_obj = datetime.strptime(operation["date"], "%Y-%m-%dT%H:%M:%S.%f")
+    op_date = datetime.strftime(datetime_obj, "%d.%m.%Y")
+    op_description = operation["description"]
+    op_from = format_account(operation["from"])
+    op_to = format_account(operation["to"])
+    op_amount = operation["operationAmount"]["amount"]
+    op_currency = operation["operationAmount"]["currency"]["name"]
+
+    result = (f"\n{op_date} {op_description}\n"
+              f"{op_from} -> {op_to}\n"
+              f"{op_amount} {op_currency}")
+
+    return result
