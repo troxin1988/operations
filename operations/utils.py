@@ -79,13 +79,16 @@ def format_operation(operation: dict) -> str:
     datetime_obj = datetime.strptime(operation["date"], "%Y-%m-%dT%H:%M:%S.%f")
     op_date = datetime.strftime(datetime_obj, "%d.%m.%Y")
     op_description = operation["description"]
-    op_from = format_account(operation["from"])
+    if op_description.lower() != "открытие вклада":
+        op_from = format_account(operation["from"]) + " -> "
+    else:
+        op_from = ""
     op_to = format_account(operation["to"])
     op_amount = operation["operationAmount"]["amount"]
     op_currency = operation["operationAmount"]["currency"]["name"]
 
     result = (f"\n{op_date} {op_description}\n"
-              f"{op_from} -> {op_to}\n"
+              f"{op_from}{op_to}\n"
               f"{op_amount} {op_currency}")
 
     return result
